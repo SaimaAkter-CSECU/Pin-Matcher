@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pin Generator</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="pin-generator half-width">
+                    <input class="form-control" type="text" id="random_pin_input">
+                    <button class="generate-btn" id="generate_random_pin">Generate Pin</button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="input-section half-width">
+                    <input class="form-control" type="text" id="calculator_input">
+                    <div class="numbers">
+                        <div class="calc-body">
+                            <div class="calc-button-row">
+                              <div class="button" onclick="getInput('7')">7</div>
+                              <div class="button" onclick="getInput('8')">8</div>
+                              <div class="button" onclick="getInput('9')">9</div>
+                            </div>
+                            <div class="calc-button-row">
+                              <div class="button" onclick="getInput('4')">4</div>
+                              <div class="button" onclick="getInput('5')">5</div>
+                              <div class="button" onclick="getInput('6')">6</div>
+                            </div>
+                            <div class="calc-button-row">
+                              <div class="button" onclick="getInput('1')">1</div>
+                              <div class="button" onclick="getInput('2')">2</div>
+                              <div class="button" onclick="getInput('3')">3</div>
+                            </div>
+                            <div class="calc-button-row">
+                                <div class="button" onclick="clearLastInput()"><</div>
+                                <div class="button" onclick="getInput('0')">0</div>
+                                <div class="button" onclick="clearInput()">C</div>
+                            </div>
+                            <div>
+                                <button type="submit" class="submit-btn" id="submit">Submit</button>
+                                <p class="action-left" id="input_try_count"><span id="input_try">3 </span> try left</p>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="notify-section">
+            <p class="notify" id="pin_not_matched">❌ Pin Didn't Match, Please try again</p>
+            <p class="notify" id="pin_matched">✅ Pin Matched... Secret door is opening for you</p>
+        </div>
+    </div>
+
+    <script>
+        var pin_input= document.getElementById('random_pin_input'); 
+        var calc_input= document.getElementById('calculator_input'); 
+
+        document.getElementById('generate_random_pin').addEventListener("click", function(){
+            pin_input.value = Math.floor((Math.random() * 9000)+1000);
+        });
+        
+        function getInput(input)
+        {
+            calc_input.value += input; 
+        }
+        
+        function clearInput()
+        {
+            calc_input.value = ''; 
+        }
+
+        function clearLastInput()
+        {
+            if(calc_input.value != ''){
+                calc_input.value = (calc_input.value).slice(0,(calc_input.value).length-1); 
+            }       
+        }
+        
+        var input_try = document.getElementById('input_try').innerText; 
+        document.getElementById('submit').addEventListener("click",function(){
+            if(pin_input.value == calc_input.value){
+                document.getElementById("pin_matched").style.display = 'block';
+                document.getElementById("pin_not_matched").style.display = 'none';
+                // document.getElementById('input_try').innerText = '3'; 
+            }
+            else{
+                document.getElementById("pin_not_matched").style.display = 'block';
+                document.getElementById("pin_matched").style.display = 'none';
+                
+                input_try--;
+                document.getElementById('input_try').innerText = input_try; 
+                if(parseInt(input_try) < 0){
+                    document.getElementById('submit').disabled = true; 
+                    document.getElementById('submit').style.backgroundColor = 'gray'; 
+                    document.getElementById('input_try_count').style.display = 'none'; 
+                }
+            }
+        });
+        
+    </script>
+</body>
+</html>
